@@ -1,0 +1,10 @@
+schema_version: 1
+module_path: firmware
+title: MLX90642红外热成像固件
+scope:
+    - USER/
+    - SYSTEM/
+    - HARDWAVE/
+source_files: []
+depends_on: []
+related_to: []

@@ -1,0 +1,44 @@
+# Keil / ARMCC build outputs
+**/Objects/
+**/Listings/
+**/Debug/
+**/RTE/
+*.o
+*.d
+*.crf
+*.axf
+*.elf
+*.hex
+*.bin
+*.map
+*.lst
+*.lnp
+*.sct
+*.dep
+*.htm
+*.build_log.htm
+*.iex
+
+# Keil user/workspace files and logs
+*.uvguix.*
+*.uvgui.*
+*.uvgui_*
+JLinkLog.txt
+JLinkSettings.ini
+
+# IDE / OS temporary files
+.vscode/
+.idea/
+*.swp
+*.tmp
+*.bak
+Thumbs.db
+Desktop.ini
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Local agent/cache folders
+.agents/
+.codex/
