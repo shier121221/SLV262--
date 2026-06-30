@@ -725,6 +725,16 @@
               <FilePath>.\Hardware\Serial.h</FilePath>
             </File>
             <File>
+              <FileName>Protocol.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\Protocol.c</FilePath>
+            </File>
+            <File>
+              <FileName>Protocol.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\Protocol.h</FilePath>
+            </File>
+            <File>
               <FileName>Encoder.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Hardware\Encoder\Encoder.c</FilePath>

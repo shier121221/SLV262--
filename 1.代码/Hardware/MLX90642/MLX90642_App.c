@@ -4,6 +4,8 @@
 #include "Serial.h"
 #include "myiic.h"
 
+#define MLX90642_DEBUG_TEXT 0
+
 #define MLX90642_APP_ADDR_DEFAULT   SA_90642_DEFAULT
 #define MLX90642_APP_ADDR_FALLBACK  0x33
 
@@ -31,13 +33,17 @@ static void MLX90642_App_ScanBus(void)
         if (MLX90642_App_ProbeAddress(addr))
         {
             found = 1;
+#if MLX90642_DEBUG_TEXT
             Serial1_Printf("MLX90642 bus addr found:0x%02X\r\n", addr);
+#endif
         }
     }
 
     if (found == 0)
     {
+#if MLX90642_DEBUG_TEXT
         Serial1_Printf("MLX90642 bus scan:no ack\r\n");
+#endif
     }
 }
 
