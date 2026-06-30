@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Start;.\Library;.\User;.\System;.\Hardware;.\Hardware\Encoder;.\Hardware\Motor;.\Hardware\MPU6050;.\Hardware\PID;.\Hardware\SHT31</IncludePath>
+              <IncludePath>.\Start;.\Library;.\User;.\System;.\Hardware;.\Hardware\Encoder;.\Hardware\Motor;.\Hardware\MPU6050;.\Hardware\PID;.\Hardware\SHT31;.\Hardware\MLX90642</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -808,6 +808,46 @@
               <FileName>PID.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Hardware\PID\PID.h</FilePath>
+            </File>
+            <File>
+              <FileName>MLX90642.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\MLX90642\MLX90642.c</FilePath>
+            </File>
+            <File>
+              <FileName>MLX90642.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\MLX90642\MLX90642.h</FilePath>
+            </File>
+            <File>
+              <FileName>MLX90642_depends.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\MLX90642\MLX90642_depends.c</FilePath>
+            </File>
+            <File>
+              <FileName>MLX90642_depends.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\MLX90642\MLX90642_depends.h</FilePath>
+            </File>
+            <File>
+              <FileName>myiic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\MLX90642\myiic.c</FilePath>
+            </File>
+            <File>
+              <FileName>myiic.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\MLX90642\myiic.h</FilePath>
+            </File>
+            <File>
+              <FileName>MLX90642_App.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\MLX90642\MLX90642_App.c</FilePath>
+            </File>
+            <File>
+              <FileName>MLX90642_App.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\MLX90642\MLX90642_App.h</FilePath>
             </File>
           </Files>
         </Group>

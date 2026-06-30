@@ -10,13 +10,15 @@
 #include "MPU6050.h"
 #include "PID.h"
 #include "SHT31.h"
+#include "MLX90642_App.h"
 #include <string.h>
 #include <stdio.h>
 
 #define OLED_ENABLE 0
 #define MOTOR_ENCODER_TEST 0
 #define SPEED_LOOP_TEST 0
-#define TRACK_MODULE_TEST 1
+#define TRACK_MODULE_TEST 0
+#define MLX90642_ENABLE 1
 #define TEST_MOTOR_L_PWM 300
 #define TEST_MOTOR_R_PWM 500
 #define TEST_PRINT_INTERVAL_MS 100
@@ -41,6 +43,7 @@ float SpeedR_cms;
 // MPU6050数据
 int16_t AX, AY, AZ;		
 int16_t GX, GY, GZ;
+float GyroZ_Dps = 0.0f;
 
 float SHT31_Temperature = 0.0f;
 float SHT31_Humidity = 0.0f;
@@ -52,6 +55,8 @@ uint16_t Track_Analog[8] = {0};
 uint16_t Battery_ADC_Raw = 0;
 float Battery_Voltage = 0.0f;
 uint8_t Battery_Percent = 0;
+float MLX90642_TempMap[MLX90642_APP_PIXELS];
+uint8_t MLX90642_Ready = 0;
 
 // 偏航角相关变量
 float YawAngle = 0.0f;           // 当前偏航角, 度
@@ -468,6 +473,7 @@ void Yaw_Update(float dt)
 	{
 		gyro_z_dps = 0.0f;
 	}
+	GyroZ_Dps = gyro_z_dps;
 	
     // 积分得到偏航角
 	YawAngle += gyro_z_dps * dt;
@@ -536,9 +542,6 @@ int main(void)
 #if OLED_ENABLE
 	OLED_Init();			
 #endif
-#if !MOTOR_ENCODER_TEST && !SPEED_LOOP_TEST && !TRACK_MODULE_TEST
-	Timer_Init();			
-#endif
 	Encoder_TIM3_Init();		
 	Encoder_Soft_Init();		
 //	LED_Init();
@@ -556,11 +559,16 @@ int main(void)
 #if TRACK_MODULE_TEST
     Track_Module_TestLoop();
 #endif
-	MPU6050_Init();			
+	MPU6050_Init();
+    Serial1_Printf("MPU6050 ID:0x%02X\r\n", MPU6050_GetID());
+#if MLX90642_ENABLE
+    MLX90642_Ready = (MLX90642_App_Init() == 0);
+#endif
 	SHT31_Init();
     Delay_ms(500);
     // 陀螺仪Z轴零偏校准, 上电保持静止约1秒
 	GyroZ_Calibrate();
+    Serial1_Printf("GyroZ offset:%.2f\r\n", GyroZ_Offset);
     Delay_ms(500);
     // 速度环PID初始化(内环, 增量式, PWM限幅0-1000)
     fp32 param_SpeedL[3] = {PID_Param_SpeedL.Kp, PID_Param_SpeedL.Ki, PID_Param_SpeedL.Kd};
@@ -577,6 +585,9 @@ int main(void)
     // 角度环PID初始化(位置式, 输出差速速度, 限幅±40cm/s)
     fp32 param_YAW[3] = {PID_Param_YAW.Kp, PID_Param_YAW.Ki, PID_Param_YAW.Kd};
     PID_init(&PID_YAW, PID_POSITION, param_YAW, 30.0f, 10.0f);
+#if !MOTOR_ENCODER_TEST && !SPEED_LOOP_TEST && !TRACK_MODULE_TEST
+	Timer_Init();
+#endif
 	
     // OLED显示初始化
 #if OLED_ENABLE
@@ -609,13 +620,19 @@ int main(void)
 			SendDataFlag = 0;
             MPU6050_GetData(&AX, &AY, &AZ, &GX, &GY, &GZ);
             SHT31_Ready = (SHT31_ReadData(&SHT31_Temperature, &SHT31_Humidity) == 0);
+#if MLX90642_ENABLE
+            if (MLX90642_Ready && MLX90642_App_ReadFrame(MLX90642_TempMap) == 0)
+            {
+                MLX90642_App_PrintFrame(MLX90642_TempMap);
+            }
+#endif
 			
             // 发送数据格式: 角度, 温度, 湿度, 当前速度
 			AvgSpeed = (SpeedL_Filtered + SpeedR_Filtered) / 2.0f;
 			AvgDistance = (PositionL + PositionR) / 2.0f;
 			
-            Serial1_Printf("Angle:%.2f,T:%.2f,H:%.2f,Speed:%.2f\r\n",
-                           YawAngle, SHT31_Temperature, SHT31_Humidity, AvgSpeed);
+            Serial1_Printf("Angle:%.2f,GZ:%d,Dps:%.2f,T:%.2f,H:%.2f,Speed:%.2f\r\n",
+                           YawAngle, GZ, GyroZ_Dps, SHT31_Temperature, SHT31_Humidity, AvgSpeed);
 		}
 		
 		// 处理USART1接收到的命令
@@ -666,7 +683,6 @@ int main(void)
 		
 
         // 读取MPU6050数据(主循环高频更新, 保证中断使用最新GZ值)
-		MPU6050_GetData(&AX, &AY, &AZ, &GX, &GY, &GZ);
 		
         // 第1行显示平均行驶距离(cm)
 #if OLED_ENABLE
