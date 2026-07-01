@@ -1,0 +1,36 @@
+# 知识卡导出索引文件
+schema_version: 1
+locale: zh-CN
+branch: Q0DeR-MaG1C-BrAnCh-Fo2-NoN-GiT-Or-No-C0MmIt
+nodes_managed: true
+exported_at: "2026-06-29T08:20:06Z"
+modules:
+    cmsis:
+        dir_name: STM32F10x CMSIS核心与启动支持
+        title: STM32F10x CMSIS核心与启动支持
+        scope:
+            - CMSIS/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    firmware:
+        dir_name: MLX90642红外热成像固件
+        title: MLX90642红外热成像固件
+        scope:
+            - USER/
+            - SYSTEM/
+            - HARDWAVE/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    stm32_std_lib:
+        dir_name: STM32F10x 标准外设库
+        title: STM32F10x 标准外设库
+        scope:
+            - FWLIB/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []

@@ -1,0 +1,8 @@
+schema_version: 1
+module_path: stm32_std_lib
+title: STM32F10x 标准外设库
+scope:
+    - FWLIB/
+source_files: []
+depends_on: []
+related_to: []
